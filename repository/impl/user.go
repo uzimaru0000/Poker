@@ -15,27 +15,27 @@ func NewInMemUserRepository() repository.UserRepository {
 	}
 }
 
-func (repo *inmemUserRepository) GetUser(user *model.User) (*model.User, error) {
-	u, ok := repo.table[user.ID]
+func (repo *inmemUserRepository) GetUserByID(id string) (*model.User, error) {
+	u, ok := repo.table[id]
 	if ok {
 		return &u, nil
 	}
 
-	return repo.GetUserWithEmail(user)
+	return nil, &repository.NotFound{ID: id}
 }
 
-func (repo *inmemUserRepository) GetUserWithEmail(user *model.User) (*model.User, error) {
+func (repo *inmemUserRepository) GetUserByEmail(email string) (*model.User, error) {
 	var result *model.User
 
 	for _, value := range repo.table {
-		if value.Email == user.Email {
+		if value.Email == email {
 			result = &value
 			break
 		}
 	}
 
 	if result == nil {
-		return nil, &repository.NotFound{ID: user.ID}
+		return nil, &repository.NotFound{ID: email}
 	}
 
 	return result, nil

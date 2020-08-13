@@ -9,30 +9,24 @@ import (
 	"github.com/uzimaru0000/poker/repository"
 )
 
-func TestGetUser(t *testing.T) {
+func TestGetUserByID(t *testing.T) {
 	tests := []struct {
 		description string
-		arg         *model.User
+		arg         string
 		expected    *model.User
 		expectedErr error
 	}{
 		{
 			description: "正常に取得出来る",
-			arg:         &model.User{ID: "hoge"},
+			arg:         "hoge",
 			expected:    &model.User{ID: "hoge", Name: "Hoge Fuga", Email: "hoge@example.com"},
 			expectedErr: nil,
 		},
 		{
 			description: "存在しないIDだとerrorになる",
-			arg:         &model.User{ID: "error"},
+			arg:         "error",
 			expected:    nil,
 			expectedErr: &repository.NotFound{ID: "error"},
-		},
-		{
-			description: "Emailアドレスでも取得できる",
-			arg:         &model.User{Email: "hoge@example.com"},
-			expected:    &model.User{ID: "hoge", Name: "Hoge Fuga", Email: "hoge@example.com"},
-			expectedErr: nil,
 		},
 	}
 
@@ -47,7 +41,58 @@ func TestGetUser(t *testing.T) {
 				},
 			}
 
-			actual, err := repo.GetUser(tt.arg)
+			actual, err := repo.GetUserByID(tt.arg)
+			if !errors.Is(err, tt.expectedErr) {
+				t.Errorf(`
+expected:	err = %v
+actual:	err = %v
+				`, tt.expectedErr, err)
+				return
+			}
+
+			if !reflect.DeepEqual(actual, tt.expected) {
+				t.Errorf(`
+expected:	result = %v
+actual:	result = %v
+				`, tt.expected, actual)
+			}
+		})
+	}
+}
+
+func TestGetUserByEmail(t *testing.T) {
+	tests := []struct {
+		description string
+		arg         string
+		expected    *model.User
+		expectedErr error
+	}{
+		{
+			description: "正常に取得出来る",
+			arg:         "hoge@example.com",
+			expected:    &model.User{ID: "hoge", Name: "Hoge Fuga", Email: "hoge@example.com"},
+			expectedErr: nil,
+		},
+		{
+			description: "存在しないEmailだとerrorになる",
+			arg:         "error@example.com",
+			expected:    nil,
+			expectedErr: &repository.NotFound{ID: "error@example.com"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.description, func(t *testing.T) {
+			repo := NewInMemUserRepository()
+			repo.(*inmemUserRepository).table = map[string]model.User{
+				"hoge": {
+					ID:    "hoge",
+					Name:  "Hoge Fuga",
+					Email: "hoge@example.com",
+				},
+			}
+
+			actual, err := repo.GetUserByEmail(tt.arg)
 			if !errors.Is(err, tt.expectedErr) {
 				t.Errorf(`
 expected:	err = %v

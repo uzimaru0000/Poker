@@ -34,7 +34,7 @@ func (ac *authController) SignUp(email string, name string, password string) (*m
 }
 
 func (ac *authController) SignIn(email string, password string) (string, error) {
-	user, err := ac.userUsecase.GetUser(&model.User{Email: email})
+	user, err := ac.userUsecase.GetUserByEmail(email)
 	if err != nil {
 		fmt.Printf("GetUser\n")
 		return "", err

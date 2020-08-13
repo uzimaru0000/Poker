@@ -36,8 +36,12 @@ func (uu *userUsecase) CreateUser(user *model.User) (*model.User, error) {
 	return user, nil
 }
 
-func (uu *userUsecase) GetUser(user *model.User) (*model.User, error) {
-	return uu.userRepo.GetUser(user)
+func (uu *userUsecase) GetUserByID(id string) (*model.User, error) {
+	return uu.userRepo.GetUserByID(id)
+}
+
+func (uu *userUsecase) GetUserByEmail(email string) (*model.User, error) {
+	return uu.userRepo.GetUserByEmail(email)
 }
 
 func (uu *userUsecase) UpdateUser(user *model.User) (*model.User, error) {
