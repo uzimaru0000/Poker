@@ -48,5 +48,21 @@ func (t *tokenizer) VerifyToken(tokenString string) (interface{}, error) {
 		return nil, err
 	}
 
-	return token.Claims, nil
+	return decodeClain(token.Claims)
+}
+
+func decodeClain(raw interface{}) (*Claim, error) {
+	claims, ok := raw.(jwt.MapClaims)
+	if !ok {
+		return nil, errors.New("Failed")
+	}
+
+	sub, ok := claims["sub"].(string)
+	if !ok {
+		return nil, errors.New("Not exist field for subject")
+	}
+
+	return &Claim{
+		Subject: sub,
+	}, nil
 }

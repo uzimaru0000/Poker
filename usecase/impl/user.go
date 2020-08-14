@@ -9,19 +9,19 @@ import (
 	"github.com/uzimaru0000/poker/usecase"
 )
 
-type userUsecase struct {
+type userUseCase struct {
 	userRepo      repository.UserRepository
 	uuidGenerator lib.UUIDGenerator
 }
 
-func NewUserUsecase(userRepo repository.UserRepository, uuidGenerator lib.UUIDGenerator) usecase.UserUsecase {
-	return &userUsecase{
+func NewUserUseCase(userRepo repository.UserRepository, uuidGenerator lib.UUIDGenerator) usecase.UserUseCase {
+	return &userUseCase{
 		userRepo:      userRepo,
 		uuidGenerator: uuidGenerator,
 	}
 }
 
-func (uu *userUsecase) CreateUser(user *model.User) (*model.User, error) {
+func (uu *userUseCase) CreateUser(user *model.User) (*model.User, error) {
 	id, err := uu.uuidGenerator.Generate()
 	if err != nil {
 		return nil, err
@@ -36,18 +36,18 @@ func (uu *userUsecase) CreateUser(user *model.User) (*model.User, error) {
 	return user, nil
 }
 
-func (uu *userUsecase) GetUserByID(id string) (*model.User, error) {
+func (uu *userUseCase) GetUserByID(id string) (*model.User, error) {
 	return uu.userRepo.GetUserByID(id)
 }
 
-func (uu *userUsecase) GetUserByEmail(email string) (*model.User, error) {
+func (uu *userUseCase) GetUserByEmail(email string) (*model.User, error) {
 	return uu.userRepo.GetUserByEmail(email)
 }
 
-func (uu *userUsecase) UpdateUser(user *model.User) (*model.User, error) {
+func (uu *userUseCase) UpdateUser(user *model.User) (*model.User, error) {
 	return nil, errors.New("Failed")
 }
 
-func (uu *userUsecase) DeleteUser(user *model.User) error {
+func (uu *userUseCase) DeleteUser(user *model.User) error {
 	return errors.New("Failed")
 }

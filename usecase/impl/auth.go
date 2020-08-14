@@ -14,7 +14,7 @@ type authUsecase struct {
 	hashGen  lib.HashGenerator
 }
 
-func NewAuthUsecase(authRepo repository.AuthRepository, hashGen lib.HashGenerator) usecase.AuthUsecase {
+func NewAuthUseCase(authRepo repository.AuthRepository, hashGen lib.HashGenerator) usecase.AuthUseCase {
 	return &authUsecase{
 		authRepo: authRepo,
 		hashGen:  hashGen,

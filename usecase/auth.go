@@ -1,6 +1,6 @@
 package usecase
 
-type AuthUsecase interface {
+type AuthUseCase interface {
 	SignUp(string, string) error
 	SignIn(string, string) error
 }
